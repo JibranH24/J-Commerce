@@ -1,5 +1,18 @@
 <resources>
-    <string name="app_name">J-Commerce</string>
+    <string name="app_name">The Bran.</string>
     <string name="rightAddress">The Only Place\nFor All Things\nFurniture</string>
     <string name="quality">the best quality\nfor the best price</string>
+    <string name="letsLogin">Let\'s Login</string>
+    <string name="donthaveaccount">Don\'t have an account? Register</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="facebook">Facebook</string>
+    <string name="google">Google</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="lets_register">Let\'s Register</string>
+    <string name="alreadyhavelogin">Already have an account? Login</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
 </resources>
