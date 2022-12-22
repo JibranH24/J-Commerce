@@ -1,2 +1,2 @@
 # J-Commerce
-Android ecommerce app made with Kotlin, Firebase, MVVN &amp; Coroutines
+The Bran. is an android ecommerce app made using Kotlin, Firebase, MVVN and Coroutines
