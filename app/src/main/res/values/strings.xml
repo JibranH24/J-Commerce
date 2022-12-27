@@ -15,4 +15,6 @@
     <string name="alreadyhavelogin">Already have an account? Login</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="we_will_send_you_a_password_reset_link_to_your_email">We will send you a password reset link to your email</string>
 </resources>
