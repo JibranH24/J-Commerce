@@ -15,29 +15,31 @@ import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TableFragment: BaseCategoryFragment() {
+class WardrobeFragment: BaseCategoryFragment() {
 
     @Inject
     lateinit var firestore: FirebaseFirestore
 
-    val viewModel by viewModels<CategoryViewModel>{
-        BaseCategoryViewModelFactory(firestore, Category.Tables)
+    val viewModel by viewModels<CategoryViewModel> {
+        BaseCategoryViewModelFactory(firestore, Category.Wardrobes)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launchWhenStarted {
             viewModel.offerProducts.collectLatest {
-                when(it){
-                    is Resource.Loading ->{
+                when (it) {
+                    is Resource.Loading -> {
                         showOfferLoading()
                     }
-                    is Resource.Success ->{
+                    is Resource.Success -> {
                         offerAdapter.differ.submitList(it.data)
                         hideOfferLoading()
                     }
-                    is Resource.Error ->{
-                        Snackbar.make(requireView(),it.message.toString(), Snackbar.LENGTH_LONG).show()
+                    is Resource.Error -> {
+                        Snackbar.make(requireView(), it.message.toString(), Snackbar.LENGTH_LONG)
+                            .show()
                         hideOfferLoading()
                     }
                     else -> Unit //do nothing
@@ -46,16 +48,17 @@ class TableFragment: BaseCategoryFragment() {
         }
         lifecycleScope.launchWhenStarted {
             viewModel.bestProducts.collectLatest {
-                when(it){
-                    is Resource.Loading ->{
+                when (it) {
+                    is Resource.Loading -> {
                         showBestProductsLoading()
                     }
-                    is Resource.Success ->{
+                    is Resource.Success -> {
                         bestProductsAdapter.differ.submitList(it.data)
                         hideBestProductsLoading()
                     }
-                    is Resource.Error ->{
-                        Snackbar.make(requireView(),it.message.toString(), Snackbar.LENGTH_LONG).show()
+                    is Resource.Error -> {
+                        Snackbar.make(requireView(), it.message.toString(), Snackbar.LENGTH_LONG)
+                            .show()
                         hideBestProductsLoading()
                     }
                     else -> Unit //do nothing

@@ -15,13 +15,13 @@ import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TableFragment: BaseCategoryFragment() {
+class BedFragment: BaseCategoryFragment() {
 
     @Inject
     lateinit var firestore: FirebaseFirestore
 
     val viewModel by viewModels<CategoryViewModel>{
-        BaseCategoryViewModelFactory(firestore, Category.Tables)
+        BaseCategoryViewModelFactory(firestore, Category.Beds)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

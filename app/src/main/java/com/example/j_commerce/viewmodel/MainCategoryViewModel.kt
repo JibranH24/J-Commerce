@@ -1,11 +1,11 @@
 package com.example.j_commerce.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.example.j_commerce.data.Product
 import com.example.j_commerce.util.Resource
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,12 +39,15 @@ class MainCategoryViewModel @Inject constructor(
             _specialProducts.emit(Resource.Loading())
         }
         firestore.collection("Products")
-            .whereEqualTo("category", "Special Products").get()
+            .whereEqualTo("category", "Special Products").limit(pagingInfo.pageNumber * 10).get()
             .addOnSuccessListener { result ->
                 val specialProductsList = result.toObjects(Product::class.java)
+                pagingInfo.isPagingEnd = bestProducts == pagingInfo.oldBestProducts
+                pagingInfo.oldBestProducts  = specialProductsList
                 viewModelScope.launch {
                     _specialProducts.emit(Resource.Success(specialProductsList))
                 }
+                pagingInfo.pageNumber ++
             }.addOnFailureListener {
                 viewModelScope.launch {
                     _specialProducts.emit(Resource.Error(it.message.toString()))
@@ -57,12 +60,15 @@ class MainCategoryViewModel @Inject constructor(
             _bestDealsProduct.emit(Resource.Loading())
         }
         firestore.collection("Products")
-            .whereEqualTo("category", "Best Deals").get()
+            .whereEqualTo("category", "Best Deals").limit(pagingInfo.pageNumber * 10).get()
             .addOnSuccessListener { result ->
                 val bestDealsProducts = result.toObjects(Product::class.java)
+                pagingInfo.isPagingEnd = bestProducts == pagingInfo.oldBestProducts
+                pagingInfo.oldBestProducts  = bestDealsProducts
                 viewModelScope.launch {
                     _bestDealsProduct.emit(Resource.Success(bestDealsProducts))
                 }
+                pagingInfo.pageNumber ++
             }.addOnFailureListener {
                 viewModelScope.launch {
                     _bestDealsProduct.emit(Resource.Error(it.message.toString()))
@@ -76,7 +82,7 @@ class MainCategoryViewModel @Inject constructor(
         }
             // if you want to make multiple queries you have to create an index on firestore and then write it like this:
         //firestore.collection("Products").whereEqualTo("categegory","Chairs").orderBy("id",Query.Direction.ASCENDING).limit()
-        firestore.collection("Products").limit(pagingInfo.bestProductsPage * 10).get()
+        firestore.collection("Products").limit(pagingInfo.pageNumber * 10).get()
             .addOnSuccessListener { result ->
                 val bestProducts = result.toObjects(Product::class.java)
                 pagingInfo.isPagingEnd = bestProducts == pagingInfo.oldBestProducts
@@ -84,7 +90,7 @@ class MainCategoryViewModel @Inject constructor(
                 viewModelScope.launch {
                     _bestProducts.emit(Resource.Success(bestProducts))
                 }
-                pagingInfo.bestProductsPage ++
+                pagingInfo.pageNumber ++
             }.addOnFailureListener {
                 viewModelScope.launch {
                     _bestProducts.emit(Resource.Error(it.message.toString()))
@@ -94,7 +100,7 @@ class MainCategoryViewModel @Inject constructor(
 }
 }
 internal data class PagingInfo(
-    var bestProductsPage : Long =1,
+    var pageNumber : Long =1,
     var oldBestProducts: List<Product> = emptyList(),
     var isPagingEnd : Boolean = false
 
